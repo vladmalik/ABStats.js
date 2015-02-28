@@ -8,7 +8,7 @@ Version 1
 Functions included
 ----------------------
 
-interval_binary()
+*interval_binary()*
 - Calculate Adjusted Wald Confidence Interval with 
 
 intervalp_binary()
