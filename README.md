@@ -1,7 +1,7 @@
-ABStats.js Version 1
+ABStats.js 
 ==========
 
-A statistical library for A/B testing
+A statistical library for A/B testing (Version 1)
 
 Functions included
 ----------------------
