@@ -64,7 +64,7 @@
 		//Calculate z score using N-1 Two-proportion test (equivalent to Chi-square)
 			z = (p-q) * Math.sqrt((N-1)/N) / Math.sqrt(P*Q*(1/aParticipants + 1/bParticipants));
 		//If z is positive, return outer area under Normal Curve; otherwise, return inner area
-		return 1-normalAreaZtoPct(Math.abs(z));
+		return 1-normalAreaZToPct(Math.abs(z));
 	}
 	
 	
@@ -81,16 +81,26 @@
 	}
 	
 	
-/*************************** Get minimum effect for fixed sample size *************************************/
+/*************************** Get the minimum required effect size given a fixed sample size and power *************************************/
 	
 	function effect_binary(conversionRate, sampleSize, confidencePct, powerPct) {
 		var confidenceZ = normalAreaPctToZ(confidencePct);
 		var powerZ = normalAreaPctToZ_left(powerPct);
 		var z = confidenceZ + powerZ;
 		var d = Math.sqrt((2 * Math.pow(z, 2) * conversionRate * (1 - conversionRate))/(sampleSize-0.5));
-		targetRelativeIncrease = d/conversionRate;
+		var targetRelativeIncrease = d/conversionRate;
 		return targetRelativeIncrease;
 	}
+	
+	
+/*************************** Get expected sensitivity given a fixed sample size and effect size (relative) *************************************/
+	
+	function sensitivity_binary(conversionRate, sampleSize, confidencePct, targetRelativeIncrease) {
+		var confidenceZ = normalAreaPctToZ(confidencePct);
+		var powerZ = Math.sqrt(Math.pow(targetRelativeIncrease*conversionRate, 2)*(sampleSize-0.5) / 2 / conversionRate / (1 - conversionRate)) - confidenceZ;
+		var pct = normalAreaZToPct_left(powerZ);
+		return pct;
+	}	
 
 	
 /*************************** Get confidence intervals for continuous data *************************************/
@@ -162,7 +172,7 @@
 		t = (mean1 - mean2)/Math.sqrt(var1/n1 + var2/n2);
 		
 		// Get p-value using normal approximation
-		return Math.ceil(10000*(1-normalAreaZtoPct(Math.abs(t))))/10000;
+		return Math.ceil(10000*(1-normalAreaZToPct(Math.abs(t))))/10000;
 			
 	}
 
@@ -210,39 +220,13 @@
 
 /*************************** Utility functions used in other functions *************************************/	
 
-// Returns percentage (y axis) on Standard Normal Curve given z (x axis)
-	function normalDist(z) {
-		return Math.pow(Math.E,-Math.pow(z,2)/2)/Math.sqrt(2*Math.PI);
-	}
-
-// Figures out the z value (x) that yields a given percentage (y)
-	function normalDistInv(pct) {
-		// returns z on Standard Normal Curve given pct
-		return Math.sqrt(-2*Math.log(pct*Math.sqrt(2*Math.PI)));
-	}
-
-// gives p-value form z score: calculates area under Standard Normal Curve from -z to z	
-	function normalAreaZtoPct(z) {
-		var z1=0, z2=0, y1, y2; // Starting at 0, center of Normal Curve
-		var width = 0.01, height;
-		var area = 0;
-		while(z2 < z) { // break area in bars and add up
-			y1 = normalDist(z1);
-			z2 = z1+width;
-			y2 = normalDist(z2);
-			height = (y1+y2)/2;
-			area += height * width;
-			z1=z2;
-		}
-		return Math.ceil(2*area*1000000)/1000000;
-	}
-
 // Gives the 2-tailed z value such that the area under the Standard Normal Curve between -z and z is pct%
 	// e.g., normalAreaPctToZ(0.95) = 1.96, which is used in confidence intervals
 	function normalAreaPctToZ(pct) {
 		// calculates area under Standard Normal Curve = cumulative probability
 		var z1=0, z2, y1, y2; // Starting at 0, center of Normal Curve
-		var width = 0.002, height;
+		// the lower the width, the higher the precision
+		var width = 0.001, height;
 		var area = 0;
 		while(area*2 < pct) { // break area in bars and add up
 			y1 = normalDist(z1);
@@ -255,12 +239,30 @@
 		return Math.ceil(z2*10000)/10000;
 	}
 	
+// gives p-value form z score: calculates area under Standard Normal Curve from -z to z	
+	function normalAreaZToPct(z) {
+		var z1=0, z2=0, y1, y2; // Starting at 0, center of Normal Curve
+		// the lower the width, the higher the precision
+		var width = 0.001, height;
+		var area = 0;
+		while(z2 < z) { // break area in bars and add up
+			y1 = normalDist(z1);
+			z2 = z1+width;
+			y2 = normalDist(z2);
+			height = (y1+y2)/2;
+			area += height * width;
+			z1=z2;
+		}
+		return Math.ceil(2*area*1000000)/1000000;
+	}	
+	
 // Gives the left-tailed z value such that the area under the Standard Normal Curve between -z and z is pct%
 	// e.g., normalAreaPctToZ_left(0.95) = 1.64 (this is used to calculate z for desired power)
 	function normalAreaPctToZ_left(pct) {
 		// calculates area under Standard Normal Curve = cumulative probability
 		var z1=0, z2, y1, y2; // Starting at 0, center of Normal Curve
-		var width = 0.002, height;
+		// the lower the width, the higher the precision
+		var width = 0.001, height;
 		var area = 0.5;
 		while(area < pct) { // break area in bars and add up
 			y1 = normalDist(z1);
@@ -271,4 +273,33 @@
 			z1=z2;
 		}
 		return Math.ceil(z2*10000)/10000;
+	}
+
+// Gives a percent from a left-tailed value such that the area under the Standard Normal Curve between -z and z is pct%	
+	// e.g., normalAreaPctToZ_left(1.64) = 0.95 (this is used to calculate power pct from z)
+	function normalAreaZToPct_left(z) {
+		var z1=0, z2=0, y1, y2; // Starting at 0, center of Normal Curve
+		// the lower the width, the higher the precision
+		var width = 0.001, height;
+		var area = 0.5;
+		while(z2 < z) { // break area in bars and add up
+			y1 = normalDist(z1);
+			z2 = z1+width;
+			y2 = normalDist(z2);
+			height = (y1+y2)/2;
+			area += height * width;
+			z1=z2;
+		}
+		return Math.ceil(area*1000000)/1000000;
+	}
+	
+// Returns percentage (y axis) on Standard Normal Curve given z (x axis)
+	function normalDist(z) {
+		return Math.pow(Math.E,-Math.pow(z,2)/2)/Math.sqrt(2*Math.PI);
+	}
+
+// Figures out the z value (x) that yields a given percentage (y)
+	function normalDistInv(pct) {
+		// returns z on Standard Normal Curve given pct
+		return Math.sqrt(-2*Math.log(pct*Math.sqrt(2*Math.PI)));
 	}
