@@ -1,7 +1,7 @@
 ABStats.js / ABStats.php
 ==========
 
-A statistical library for A/B testing (Version 1)
+A statistical library for A/B testing (Version 1.01)
 
 Functions included
 ----------------------
