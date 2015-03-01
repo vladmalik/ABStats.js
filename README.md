@@ -54,13 +54,17 @@ Returns percentage (y axis) on Standard Normal Curve given z (x axis)
 
 Figures out the z value (x) that yields a given percentage (y)
 
-**normalAreaZtoPct()**
+**normalAreaZToPct()**
 
 Gives p-value form z score: calculates area under Standard Normal Curve from -z to z
 
 **normalAreaPctToZ()**
 
 Gives the 2-tailed z value such that the area under the Standard Normal Curve between -z and z is pct%
+
+**normalAreaZToPct_left()**
+
+Gives the left-tailed z value such that the area under the Standard Normal Curve between -z and z is pct%
 
 **normalAreaPctToZ_left()**
 
