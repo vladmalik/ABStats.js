@@ -1,7 +1,7 @@
 ABStats.js / ABStats.php
 ==========
 
-A statistical library for A/B testing (Version 1.01). You can use this library to embed analytics into existing programs, enhance user scripts, or just learn about statistics. The code is anotated and readable.
+A statistical library for A/B testing (Version 1.01). You can use this library to embed analytics into existing programs, enhance user scripts, or just learn about statistics. The code is designed to be readable.
 
 Functions included
 ----------------------
