@@ -30,6 +30,10 @@ Get sample size for binomial proportion
 
 Get minimum effect for fixed sample size
 
+**sensitivity_binary()**
+
+Get expected power given a fixed sample size and desired effect
+
 **interval_continuous()**
 
 Get confidence intervals for continuous data
