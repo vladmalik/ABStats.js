@@ -1,7 +1,7 @@
 ABStats.js / ABStats.php
 ==========
 
-A statistical library for A/B testing (Version 1.01)
+A statistical library for A/B testing (Version 1.01). You can use this library to embed analytics into existing programs, enhance user scripts, or just learn about statistics. The code is anotated and readable.
 
 Functions included
 ----------------------
@@ -28,11 +28,11 @@ Get sample size for binomial proportion
 
 **effect_binary()**
 
-Get minimum effect for fixed sample size
+Get minimum effect for fixed sample size. It's the same as sampleSize_binary() but solved for effect size.
 
 **sensitivity_binary()**
 
-Get expected power given a fixed sample size and desired effect
+Get expected power given a fixed sample size and desired effect. It's the same as sampleSize_binary() but solved for power pct.
 
 **interval_continuous()**
 
@@ -56,7 +56,7 @@ Returns percentage (y axis) on Standard Normal Curve given z (x axis)
 
 **normalDistInv()**
 
-Figures out the z value (x) that yields a given percentage (y)
+Figures out the z value (x) that yields a given percentage (y). It's the inverse of normalDist()
 
 **normalAreaZToPct()**
 
@@ -64,7 +64,7 @@ Gives p-value form z score: calculates area under Standard Normal Curve from -z 
 
 **normalAreaPctToZ()**
 
-Gives the 2-tailed z value such that the area under the Standard Normal Curve between -z and z is pct%
+Gives the 2-tailed z value such that the area under the Standard Normal Curve between -z and z is pct%. It's the inverse of normalAreaZToPct()
 
 **normalAreaZToPct_left()**
 
@@ -72,4 +72,4 @@ Gives the left-tailed z value such that the area under the Standard Normal Curve
 
 **normalAreaPctToZ_left()**
 
-Gives the left-tailed z value such that the area under the Standard Normal Curve between -z and z is pct%
+Gives the left-tailed z value such that the area under the Standard Normal Curve between -z and z is pct%. It's the inverse of normalAreaZToPct_left()
