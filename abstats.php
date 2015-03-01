@@ -85,7 +85,7 @@ class ConfidenceInterval {
 	}
 
 	
-/*************************** Get minimum effect for fixed sample size *************************************/
+/*************************** Get the minimum required effect size given a fixed sample size and power *************************************/
 
 	function effect_binary($conversionRate, $sampleSize, $alphaPct, $powerPct) {
 		$confidenceZ = normalAreaPctToZ($alphaPct);
@@ -95,6 +95,16 @@ class ConfidenceInterval {
 		$targetRelativeIncrease = $d/$conversionRate;
 		return $targetRelativeIncrease;
 	}	
+	
+	
+/*************************** Get expected sensitivity given a fixed sample size and effect size (relative) *************************************/
+	
+	function sensitivity_binary($conversionRate, $sampleSize, $confidencePct, $targetRelativeIncrease) {
+		$confidenceZ = normalAreaPctToZ($confidencePct);
+		$powerZ = sqrt(pow($targetRelativeIncrease*$conversionRate, 2)*($sampleSize-0.5) / 2 / $conversionRate / (1 - $conversionRate)) - $confidenceZ;
+		$pct = normalAreaZToPct_left($powerZ);
+		return $pct;
+	}		
 	
 	
 /*************************** Get confidence intervals for continuous data *************************************/
@@ -214,24 +224,13 @@ class ConfidenceInterval {
 	
 /*************************** Utility functions used in other functions *************************************/	
 
-// Returns percentage (y) on Standard Normal Curve given z (x)
-	function normalDist($z) {
-		return pow(M_E,-pow($z,2)/2)/sqrt(2*M_PI);
-	}
-
-// Figures out the z value (x) that yields a given percentage (y)
-	function normalDistInv($pct) {
-		// returns z on Standard Normal Curve given pct
-		return sqrt(-2*log($pct*sqrt(2*M_PI)));
-	}
-
 // gives p-value form z score: calculates area under Standard Normal Curve from -z to z	
 	function normalAreaZtoPct($z) {
 		$z1=0; // Starting at 0, center of Normal Curve
 		$z2=0; 
 		$y1; 
 		$y2; 
-		$width = 0.002; 
+		$width = 0.001; 
 		$height;
 		$area = 0;
 		while($z2 < $z) { // break area in bars and add up
@@ -253,7 +252,7 @@ class ConfidenceInterval {
 		$z2=0; 
 		$y1; 
 		$y2; 
-		$width = 0.002;
+		$width = 0.001;
 		$height;
 		$area = 0;
 		while($area*2 < $pct) { // break area in bars and add up
@@ -266,6 +265,29 @@ class ConfidenceInterval {
 		}
 		return ceil($z2*10000)/10000;
 	}
+
+	
+// Gives a percent from a left-tailed value such that the area under the Standard Normal Curve between -z and z is pct%	
+	// e.g., normalAreaPctToZ_left(1.64) = 0.95 (this is used to calculate power pct from z)
+	function normalAreaZtoPct_left($z) {
+		$z1=0; // Starting at 0, center of Normal Curve
+		$z2=0; 
+		$y1; 
+		$y2; 
+		$width = 0.001; 
+		$height;
+		$area = 0.5;
+		while($z2 < $z) { // break area in bars and add up
+			$y1 = normalDist($z1);
+			$z2 = $z1+$width;
+			$y2 = normalDist($z2);
+			$height = ($y1+$y2)/2;
+			$area += $height * $width;
+			$z1=$z2;
+		}
+		return ceil($area*1000000)/1000000;
+	}
+	
 	
 // Gives the left-tailed z value such that the area under the Standard Normal Curve between -z and z is pct%
 	// e.g., normalAreaPctToZ_left(0.95) = 1.64
@@ -275,7 +297,7 @@ class ConfidenceInterval {
 		$z2=0; 
 		$y1; 
 		$y2; 
-		$width = 0.002;
+		$width = 0.001;
 		$height;
 		$area = 0.5;
 		while($area < $pct) { // break area in bars and add up
@@ -288,5 +310,16 @@ class ConfidenceInterval {
 		}
 		return ceil($z2*10000)/10000;
 	}
+	
+// Returns percentage (y) on Standard Normal Curve given z (x)
+	function normalDist($z) {
+		return pow(M_E,-pow($z,2)/2)/sqrt(2*M_PI);
+	}
+
+// Figures out the z value (x) that yields a given percentage (y)
+	function normalDistInv($pct) {
+		// returns z on Standard Normal Curve given pct
+		return sqrt(-2*log($pct*sqrt(2*M_PI)));
+	}	
 	
 ?>
