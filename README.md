@@ -1,6 +1,8 @@
 ABStats.js / ABStats.php
 ==========
 
+Plan your test and analyse your A/B data with a single line of code.
+
 A statistical library for A/B testing (Version 1.01). You can use this library to embed analytics into existing programs, [enhance user scripts](http://goodui.org/vwoaddon), or just learn about statistics. The code is designed to be readable.
 
 Functions included
