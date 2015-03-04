@@ -50,7 +50,7 @@ class ConfidenceInterval {
 		// Returns standard error used in confidence intervals
 		$stErrora = sqrt(($aSuccess/$aParticipants)*(1-($aSuccess/$aParticipants))/$aParticipants);
 		$stErrorb = sqrt(($bSuccess/$bParticipants)*(1-($bSuccess/$bParticipants))/$bParticipants);
-		return 	(($bSuccess/$bParticipants) - ($aSuccess/$aParticipants))/($stErrora + $stErrorb);
+		return 	normalAreaZToPct((($bSuccess/$bParticipants) - ($aSuccess/$aParticipants))/($stErrora + $stErrorb));
 	}
 	
 
