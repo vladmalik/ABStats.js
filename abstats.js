@@ -21,7 +21,7 @@
 /*************************** Calculates Adjusted Wald Confidence Interval around the relative % difference in proportions *************************************/	
 
 	//Usage: intervalp_binary(50, 100, 55, 120, 0.95).point;
-	function intervalp_binary(aSuccess, aParticipants, bSuccess, bParticipants, confidencePct) {
+	function interval_rel_binary(aSuccess, aParticipants, bSuccess, bParticipants, confidencePct) {
 		if(typeof normalAreaPctToZ == "function") {
 			var confidenceZ = normalAreaPctToZ(confidencePct);
 			var n1Adj = aParticipants + Math.pow(confidenceZ,2);
