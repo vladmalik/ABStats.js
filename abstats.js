@@ -46,7 +46,7 @@
 		// Returns standard error used in confidence intervals
 		var stErrora = Math.sqrt((aSuccess/aParticipants)*(1-(aSuccess/aParticipants))/aParticipants);
 		var stErrorb = Math.sqrt((bSuccess/bParticipants)*(1-(bSuccess/bParticipants))/bParticipants);
-		return 	((bSuccess/bParticipants) - (aSuccess/aParticipants))/(stErrora + stErrorb);
+		return 	normalAreaZToPct(((bSuccess/bParticipants) - (aSuccess/aParticipants))/(stErrora + stErrorb));
 	}
 	
 
