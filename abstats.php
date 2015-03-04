@@ -28,7 +28,7 @@ class ConfidenceInterval {
 /*************************** Calculates Adjusted Wald Confidence Interval around the relative % difference in proportions *************************************/	
 
 	//Usage: intervalp_binary(50, 100, 55, 120, 0.95).point;
-	function intervalp_binary($aSuccess, $aParticipants, $bSuccess, $bParticipants, $confidencePct) {
+	function interval_rel_binary($aSuccess, $aParticipants, $bSuccess, $bParticipants, $confidencePct) {
 		$confidenceZ = normalAreaPctToZ($confidencePct);
 		$n1Adj = $aParticipants + pow($confidenceZ,2);		
 		$p1Adj = ($aSuccess + pow($confidenceZ, 2)/2)/$n1Adj;		
