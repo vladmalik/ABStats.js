@@ -18,7 +18,7 @@ Calculates Adjusted Wald Confidence Interval around the relative % difference in
 
 **confidence_binary()**
 
-Gives greater confidence that the difference between proportions is greater than 0
+Gives confidence that the difference between proportions is greater than 0
 
 **significance_binary()**
 
