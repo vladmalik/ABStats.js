@@ -18,7 +18,7 @@ Functions included
 
 Calculate Adjusted Wald Confidence Interval with 
 
-**intervalp_binary()**
+**interval_rel_binary()**
 
 Calculates Adjusted Wald Confidence Interval around the relative % difference in proportions
 
