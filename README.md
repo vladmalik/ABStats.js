@@ -14,6 +14,12 @@ You can embed abstats.js in your project or run commands right in the browser co
 ----------------------
 [Check out this easy intro with examples](http://vladmalik.com/2015/02/23/5-ways-to-get-confidence-with-abstats-js/)
 
+Current uses
+----------------------
+
+[Analytics Addon for VWO Dashboard](http://goodui.org/vwoaddon/)
+Our internal email notification system (code coming soon)
+
 Functions included
 ----------------------
 
