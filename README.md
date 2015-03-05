@@ -12,7 +12,7 @@ You can embed abstats.js in your project or run commands right in the browser co
 
 5 easy ways to calculate confidence in test results
 ----------------------
-[Blog](http://vladmalik.com/2015/02/23/5-ways-to-get-confidence-with-abstats-js/)
+[Check out this basic intro](http://vladmalik.com/2015/02/23/5-ways-to-get-confidence-with-abstats-js/)
 
 
 Functions included
