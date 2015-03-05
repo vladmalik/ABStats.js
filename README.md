@@ -10,6 +10,10 @@ How to use it
 
 You can embed abstats.js in your project or run commands right in the browser console. To use it in the browser, just visit [this blog about abstats.js](http://vladmalik.com/2015/02/23/5-ways-to-get-confidence-with-abstats-js), which has the library already  included. All you need to do is open console and run any of these commands.
 
+More info
+----------------------
+[5 easy ways to calculate confidence in test results](http://vladmalik.com/2015/02/23/5-ways-to-get-confidence-with-abstats-js/)
+
 
 Functions included
 ----------------------
