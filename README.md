@@ -17,8 +17,9 @@ You can embed abstats.js in your project or run commands right in the browser co
 Current uses
 ----------------------
 
-*[Analytics Addon for VWO Dashboard](http://goodui.org/vwoaddon/)
-*Our internal email notification system (code coming soon)
+[Analytics Addon for VWO Dashboard](http://goodui.org/vwoaddon/)
+
+Our internal email notification system (code coming soon)
 
 Functions included
 ----------------------
