@@ -8,7 +8,7 @@ Plan your test and analyse your A/B data with a single line of code, embed analy
 How to use it
 ----------------------
 
-You can embed abstats.js in your project or run commands right in the browser console. To use it in the browser, just visit [http://vladmalik.com/2015/02/23/5-ways-to-get-confidence-with-abstats-js this blog about abstats.js], which has the library already  included. All you need to do is open console and run any of these commands.
+You can embed abstats.js in your project or run commands right in the browser console. To use it in the browser, just visit [http://vladmalik.com/2015/02/23/5-ways-to-get-confidence-with-abstats-js](this blog about abstats.js), which has the library already  included. All you need to do is open console and run any of these commands.
 
 
 Functions included
