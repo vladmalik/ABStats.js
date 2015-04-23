@@ -95,11 +95,12 @@
 	
 /*************************** Get expected sensitivity given a fixed sample size and effect size (relative) *************************************/
 	
-	function sensitivity_binary(conversionRate, sampleSize, confidencePct, targetRelativeIncrease) {
+	function sensitivity_binary(conversionRate, targetRelativeIncrease, confidencePct, sampleSize) {
 		var confidenceZ = normalAreaPctToZ(confidencePct);
-		var powerZ = Math.sqrt(Math.pow(targetRelativeIncrease*conversionRate, 2)*(sampleSize-0.5) / 2 / conversionRate / (1 - conversionRate)) - confidenceZ;
-		var pct = normalAreaZToPct_left(powerZ);
-		return pct;
+		var p = (conversionRate + conversionRate*(1+targetRelativeIncrease))/2;
+		var absoluteIncrease = conversionRate*targetRelativeIncrease;
+		powerZ = Math.sqrt(Math.pow(absoluteIncrease, 2)*(sampleSize - 0.5)/2/p/(1-p)) - confidenceZ;
+		return normalAreaZToPct_left(powerZ);
 	}	
 
 	
