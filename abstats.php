@@ -99,12 +99,13 @@ class ConfidenceInterval {
 	
 /*************************** Get expected sensitivity given a fixed sample size and effect size (relative) *************************************/
 	
-	function sensitivity_binary($conversionRate, $sampleSize, $confidencePct, $targetRelativeIncrease) {
+	function sensitivity_binary($conversionRate, $targetRelativeIncrease, $confidencePct, $sampleSize) {
 		$confidenceZ = normalAreaPctToZ($confidencePct);
-		$powerZ = sqrt(pow($targetRelativeIncrease*$conversionRate, 2)*($sampleSize-0.5) / 2 / $conversionRate / (1 - $conversionRate)) - $confidenceZ;
-		$pct = normalAreaZToPct_left($powerZ);
-		return $pct;
-	}		
+		$p = ($conversionRate + $conversionRate*(1+$targetRelativeIncrease))/2;
+		$absoluteIncrease = $conversionRate*$targetRelativeIncrease;
+		$powerZ = sqrt(pow($absoluteIncrease, 2)*($sampleSize - 0.5)/2/$p/(1-$p)) - $confidenceZ;
+		return normalAreaZToPct_left($powerZ);
+	}	
 	
 	
 /*************************** Get confidence intervals for continuous data *************************************/
