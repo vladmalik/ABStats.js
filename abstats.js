@@ -10,7 +10,8 @@
 			var pAdj = (success + Math.pow(confidenceZ, 2)/2)/nAdj;
 			return {
 				upper : Math.ceil((pAdj + confidenceZ * Math.sqrt(pAdj*(1-pAdj)/nAdj))*10000)/10000,
-				lower : Math.ceil((pAdj - confidenceZ * Math.sqrt(pAdj*(1-pAdj)/nAdj))*10000)/10000
+				point :  Math.ceil((pAdj*10000))/10000,
+				lower : Math.ceil((pAdj - confidenceZ * Math.sqrt(pAdj*(1-pAdj)/nAdj))*10000)/10000				
 			}
 		} else {
 			alert("normalAreaPctToZ() from ABStats need to be included");
@@ -20,8 +21,8 @@
 	
 /*************************** Calculates Adjusted Wald Confidence Interval around the relative % difference in proportions *************************************/	
 
-	//Usage: intervalp_binary(50, 100, 55, 120, 0.95).point;
-	function interval_rel_binary(aSuccess, aParticipants, bSuccess, bParticipants, confidencePct) {
+	//Usage: interval_rel_binary(50, 100, 55, 120, 0.95).point;
+	function intervalp_binary(aSuccess, aParticipants, bSuccess, bParticipants, confidencePct) {
 		if(typeof normalAreaPctToZ == "function") {
 			var confidenceZ = normalAreaPctToZ(confidencePct);
 			var n1Adj = aParticipants + Math.pow(confidenceZ,2);
@@ -30,8 +31,8 @@
 			var p2Adj = (bSuccess + Math.pow(confidenceZ, 2)/2)/n2Adj;
 			return {
 				upper : Math.ceil(((p2Adj-p1Adj) + confidenceZ * Math.sqrt( p1Adj*(1-p1Adj)/n1Adj + p2Adj*(1-p2Adj)/n2Adj))/p1Adj*10000)/10000,
-				lower : Math.ceil(((p2Adj-p1Adj) - confidenceZ * Math.sqrt( p1Adj*(1-p1Adj)/n1Adj + p2Adj*(1-p2Adj)/n2Adj))/p1Adj*10000)/10000,
-				point : Math.ceil(((p2Adj-p1Adj)/p1Adj*10000))/10000
+				point : Math.ceil(((p2Adj-p1Adj)/p1Adj*10000))/10000,
+				lower : Math.ceil(((p2Adj-p1Adj) - confidenceZ * Math.sqrt( p1Adj*(1-p1Adj)/n1Adj + p2Adj*(1-p2Adj)/n2Adj))/p1Adj*10000)/10000				
 			}
 		} else {
 			alert("normalAreaPctToZ() from ABStats need to be included");
@@ -102,7 +103,7 @@
 		powerZ = Math.sqrt(Math.pow(absoluteIncrease, 2)*(sampleSize - 0.5)/2/p/(1-p)) - confidenceZ;
 		return normalAreaZToPct_left(powerZ);
 	}	
-
+	
 	
 /*************************** Get confidence intervals for continuous data *************************************/
 	
@@ -265,7 +266,11 @@
 		// the lower the width, the higher the precision
 		var width = 0.001, height;
 		var area = 0.5;
-		while(area < pct) { // break area in bars and add up
+		if(pct==0.5) return 0;
+		var p;
+		if(pct<0.5) p = 1 - pct; 
+		else p = pct;
+		while(area < p) { // break area in bars and add up
 			y1 = normalDist(z1);
 			z2 = z1+width;
 			y2 = normalDist(z2);
@@ -273,7 +278,9 @@
 			area += height * width;
 			z1=z2;
 		}
-		return Math.ceil(z2*10000)/10000;
+		var sign = 1;
+		if(pct<0.5) sign = -1;
+		return Math.ceil(sign*z2*10000)/10000;
 	}
 
 // Gives a percent from a left-tailed value such that the area under the Standard Normal Curve between -z and z is pct%	
