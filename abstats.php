@@ -278,7 +278,8 @@ class ConfidenceInterval {
 		$width = 0.001; 
 		$height;
 		$area = 0.5;
-		while($z2 < $z) { // break area in bars and add up
+		$zAbs = abs($z);
+		while($z2 < $zAbs) { // break area in bars and add up
 			$y1 = normalDist($z1);
 			$z2 = $z1+$width;
 			$y2 = normalDist($z2);
@@ -286,7 +287,8 @@ class ConfidenceInterval {
 			$area += $height * $width;
 			$z1=$z2;
 		}
-		return ceil($area*1000000)/1000000;
+		if($z>=0) return ceil($area*1000000)/1000000;
+		else return 1- ceil($area*1000000)/1000000;
 	}
 	
 	
