@@ -301,7 +301,11 @@ class ConfidenceInterval {
 		$width = 0.001;
 		$height;
 		$area = 0.5;
-		while($area < $pct) { // break area in bars and add up
+		if($pct==0.5) return 0;
+		$p;
+		if($pct<0.5) $p = 1 - $pct; 
+		else $p = $pct;		
+		while($area < $p) { // break area in bars and add up
 			$y1 = normalDist($z1);
 			$z2 = $z1+$width;
 			$y2 = normalDist($z2);
@@ -309,7 +313,9 @@ class ConfidenceInterval {
 			$area += $height * $width;
 			$z1=$z2;
 		}
-		return ceil($z2*10000)/10000;
+		$sign = 1;
+		if($pct<0.5) $sign = -1;		
+		return ceil($sign*$z2*10000)/10000;
 	}
 	
 // Returns percentage (y) on Standard Normal Curve given z (x)
