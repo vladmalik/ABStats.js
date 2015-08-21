@@ -243,6 +243,7 @@
 	
 // gives p-value form z score: calculates area under Standard Normal Curve from -z to z	
 // Excel: NORM.DIST(Z,0,1,FALSE)-NORM.DIST(-Z,0,1,FALSE) R: pnorm(z)-pnorm(-z)
+	// e.g., normalAreaPctToZ(0.95) = 1.96, which is used in confidence intervals
 	function normalAreaZToPct(z) {
 		var z1=0, z2=0, y1, y2; // Starting at 0, center of Normal Curve
 		// the lower the width, the higher the precision
