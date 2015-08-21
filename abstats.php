@@ -322,6 +322,7 @@ class ConfidenceInterval {
 	}
 	
 // Returns percentage (y) on Standard Normal Curve given z (x)
+// Excel: NORM.DIST(Z,0,1,FALSE) R: dnorm(z,mean=0,sd=1)
 	function normalDist($z) {
 		return pow(M_E,-pow($z,2)/2)/sqrt(2*M_PI);
 	}
