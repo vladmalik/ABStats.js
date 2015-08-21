@@ -246,6 +246,7 @@ class ConfidenceInterval {
 	}
 
 // Gives the 2-tailed z value such that the area under the Standard Normal Curve between -z and z is pct%
+// Excel: NORM.DIST(Z,0,1,FALSE)-NORM.DIST(-Z,0,1,FALSE) R: pnorm(z)-pnorm(-z)
 	// e.g., normalAreaPctToZ(0.95) = 1.96, which is used in confidence intervals
 	function normalAreaPctToZ($pct) {
 		// calculates area under Standard Normal Curve = cumulative probability
