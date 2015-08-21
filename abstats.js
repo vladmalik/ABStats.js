@@ -242,6 +242,7 @@
 	}
 	
 // gives p-value form z score: calculates area under Standard Normal Curve from -z to z	
+// Excel: NORM.DIST(Z,0,1,FALSE)-NORM.DIST(-Z,0,1,FALSE) R: pnorm(z)-pnorm(-z)
 	function normalAreaZToPct(z) {
 		var z1=0, z2=0, y1, y2; // Starting at 0, center of Normal Curve
 		// the lower the width, the higher the precision
@@ -304,6 +305,7 @@
 	}
 	
 // Returns percentage (y axis) on Standard Normal Curve given z (x axis)
+// Excel: NORM.DIST(Z,0,1,FALSE) R: dnorm(z,mean=0,sd=1)
 	function normalDist(z) {
 		return Math.pow(Math.E,-Math.pow(z,2)/2)/Math.sqrt(2*Math.PI);
 	}
