@@ -84,7 +84,9 @@
 	
 /*************************** Get the minimum required effect size given a fixed sample size and power *************************************/
 	
-	// Based on approximation; ideally conversionRate should be averate or baseline and target rates but it makes little difference
+	// Uses simplified rate
+	// Ideally conversionRate should be averate or baseline and target rates but that makes the math complicated
+	// It becomes slightly less accurate with large effects like 50%. Makes no difference in normal situations
 	function effect_binary(conversionRate, sampleSize, confidencePct, powerPct) {
 		var confidenceZ = normalAreaPctToZ(confidencePct);
 		var powerZ = normalAreaPctToZ_left(powerPct);
