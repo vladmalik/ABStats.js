@@ -21,23 +21,46 @@
 	
 /*************************** Calculates Adjusted Wald Confidence Interval around the relative % difference in proportions *************************************/	
 
-	//Usage: interval_rel_binary(50, 100, 55, 120, 0.95).point;
-	function intervalp_binary(aSuccess, aParticipants, bSuccess, bParticipants, confidencePct) {
-		if(typeof normalAreaPctToZ == "function") {
-			var confidenceZ = normalAreaPctToZ(confidencePct);
-			var n1Adj = aParticipants + Math.pow(confidenceZ,2);
-			var p1Adj = (aSuccess + Math.pow(confidenceZ, 2)/2)/n1Adj;
-			var n2Adj = bParticipants + Math.pow(confidenceZ,2);
-			var p2Adj = (bSuccess + Math.pow(confidenceZ, 2)/2)/n2Adj;
-			return {
-				upper : Math.ceil(((p2Adj-p1Adj) + confidenceZ * Math.sqrt( p1Adj*(1-p1Adj)/n1Adj + p2Adj*(1-p2Adj)/n2Adj))/p1Adj*10000)/10000,
-				point : Math.ceil(((p2Adj-p1Adj)/p1Adj*10000))/10000,
-				lower : Math.ceil(((p2Adj-p1Adj) - confidenceZ * Math.sqrt( p1Adj*(1-p1Adj)/n1Adj + p2Adj*(1-p2Adj)/n2Adj))/p1Adj*10000)/10000				
-			}
-		} else {
-			alert("normalAreaPctToZ() from ABStats need to be included");
-		}	
+	//Usage: interval_effect_binary(50, 100, 55, 120, 0.95).point;
+	function interval_effect_binary(aSuccess, aParticipants, bSuccess, bParticipants, confidencePct) {
+		var confidenceZ = normalAreaPctToZ(confidencePct);
+		var n1Adj = aParticipants + Math.pow(confidenceZ,2);
+		var p1Adj = (aSuccess + Math.pow(confidenceZ, 2)/2)/n1Adj;
+		var n2Adj = bParticipants + Math.pow(confidenceZ,2);
+		var p2Adj = (bSuccess + Math.pow(confidenceZ, 2)/2)/n2Adj;
+		return {
+			upper : Math.ceil(((p2Adj-p1Adj) + confidenceZ * Math.sqrt( p1Adj*(1-p1Adj)/n1Adj + p2Adj*(1-p2Adj)/n2Adj))/p1Adj*10000)/10000,
+			point : Math.ceil(((p2Adj-p1Adj)/p1Adj*10000))/10000,
+			lower : Math.ceil(((p2Adj-p1Adj) - confidenceZ * Math.sqrt( p1Adj*(1-p1Adj)/n1Adj + p2Adj*(1-p2Adj)/n2Adj))/p1Adj*10000)/10000				
+		}
 	}	
+	
+	
+/*************************** Calculates Adjusted Wald Confidence Interval around the relative % difference in proportions (one-tailed) *************************************/	
+
+	//Usage: interval1_effect_binary(50, 100, 55, 120, 0.95).point;
+	// Likelihood of it being less than upper bound or greater than lower bound	
+	function interval1_effect_binary(aSuccess, aParticipants, bSuccess, bParticipants, confidencePct) {
+		var confidenceZ = normalAreaPctToZ(2*confidencePct-1); // z is same as 90% two-tailed confidence
+		var n1Adj = aParticipants + Math.pow(confidenceZ,2);
+		var p1Adj = (aSuccess + Math.pow(confidenceZ, 2)/2)/n1Adj;
+		var n2Adj = bParticipants + Math.pow(confidenceZ,2);
+		var p2Adj = (bSuccess + Math.pow(confidenceZ, 2)/2)/n2Adj;
+		return {
+			upper : Math.ceil(((p2Adj-p1Adj) + confidenceZ * Math.sqrt( p1Adj*(1-p1Adj)/n1Adj + p2Adj*(1-p2Adj)/n2Adj))/p1Adj*10000)/10000,
+			point : Math.ceil(((p2Adj-p1Adj)/p1Adj*10000))/10000,
+			lower : Math.ceil(((p2Adj-p1Adj) - confidenceZ * Math.sqrt( p1Adj*(1-p1Adj)/n1Adj + p2Adj*(1-p2Adj)/n2Adj))/p1Adj*10000)/10000				
+		}
+	}
+	
+	
+	
+/*************************** Calculates probability that a false positive will have effect greater than a given value in either direction *************************************/	
+	function p_effect_false_binary(conversionRate, sampleSize, effect) {
+		var confidenceZ = effect/(Math.sqrt( 2*conversionRate*(1-conversionRate)/sampleSize)/conversionRate);
+		return 2*(1-(normalAreaZToPct(confidenceZ)+1)/2);
+	}
+	
 	
 	
 /*************************** Get the confidence level at which there is no overlap between intervals = assures p-value is at least this *************************************/		
