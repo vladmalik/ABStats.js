@@ -67,7 +67,8 @@ class ConfidenceInterval {
 /*************************** Calculates probability that a false positive will have effect greater than a given value in either direction *************************************/	
 	function p_effect_false_binary($conversionRate, $sampleSize, $effect) {
 		$confidenceZ = $effect/(sqrt( 2*$conversionRate*(1-$conversionRate)/$sampleSize)/$conversionRate);
-		return 2*(1-(normalAreaZToPct($confidenceZ)+1)/2);
+		// return 2*(1-(normalAreaZToPct($confidenceZ)+1)/2); Was experimenting with 1-tailed probability; ignore this
+		return 1-normalAreaZToPct($confidenceZ);	
 	}
 
 	
