@@ -3,6 +3,7 @@
 /***************************** Licensed under GPL v2 (c) 2015 Vlad Malik @vladmalik ********************************/
 
 // PHP requires a class to be defined
+// This has been directly converted from JS but not thoruoghly tested. There may be syntax errors.
 
 class ConfidenceInterval {
 	public $upper;
@@ -27,8 +28,8 @@ class ConfidenceInterval {
 	
 /*************************** Calculates Adjusted Wald Confidence Interval around the relative % difference in proportions *************************************/	
 
-	//Usage: intervalp_binary(50, 100, 55, 120, 0.95).point;
-	function interval_rel_binary($aSuccess, $aParticipants, $bSuccess, $bParticipants, $confidencePct) {
+	//Usage: interval_effect_binary(50, 100, 55, 120, 0.95).point;
+	function interval_effect_binary($aSuccess, $aParticipants, $bSuccess, $bParticipants, $confidencePct) {
 		$confidenceZ = normalAreaPctToZ($confidencePct);
 		$n1Adj = $aParticipants + pow($confidenceZ,2);		
 		$p1Adj = ($aSuccess + pow($confidenceZ, 2)/2)/$n1Adj;		
@@ -41,6 +42,34 @@ class ConfidenceInterval {
 		$result -> point = ceil(($p2Adj-$p1Adj)/$p1Adj*10000)/10000;
 		return $result;		
 	}
+	
+
+/*************************** Calculates Adjusted Wald Confidence Interval around the relative % difference in proportions (one-tailed) *************************************/	
+
+	//Usage: interval_effect_binary(50, 100, 55, 120, 0.95).point;
+	// Upper or lower bound for the effect
+	function interval_effect_binary($aSuccess, $aParticipants, $bSuccess, $bParticipants, $confidencePct) {
+		$confidenceZ = normalAreaPctToZ(2*$confidencePct-1);
+		$n1Adj = $aParticipants + pow($confidenceZ,2);		
+		$p1Adj = ($aSuccess + pow($confidenceZ, 2)/2)/$n1Adj;		
+		$n2Adj = $bParticipants + pow($confidenceZ,2);		
+		$p2Adj = ($bSuccess + pow($confidenceZ, 2)/2)/$n2Adj;
+		
+		$result = new ConfidenceInterval();
+		$result -> upper = ceil((($p2Adj-$p1Adj) + $confidenceZ * sqrt($p1Adj*(1-$p1Adj)/$n1Adj + $p2Adj*(1-$p2Adj)/$n2Adj))/$p1Adj*10000)/10000;
+		$result -> lower = ceil((($p2Adj-$p1Adj) - $confidenceZ * sqrt($p1Adj*(1-$p1Adj)/$n1Adj + $p2Adj*(1-$p2Adj)/$n2Adj))/$p1Adj*10000)/10000;
+		$result -> point = ceil(($p2Adj-$p1Adj)/$p1Adj*10000)/10000;
+		return $result;		
+	}
+	
+
+
+/*************************** Calculates probability that a false positive will have effect greater than a given value in either direction *************************************/	
+	function p_effect_false_binary($conversionRate, $sampleSize, $effect) {
+		$confidenceZ = $effect/(sqrt( 2*$conversionRate*(1-$conversionRate)/$sampleSize)/$conversionRate);
+		return 2*(1-(normalAreaZToPct($confidenceZ)+1)/2);
+	}
+
 	
 	
 /*************************** Get the confidence level at which there is no overlap between intervals = assures p-value is at least this *************************************/		
