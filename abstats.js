@@ -33,13 +33,13 @@
 			point : Math.ceil(((p2Adj-p1Adj)/p1Adj*10000))/10000,
 			lower : Math.ceil(((p2Adj-p1Adj) - confidenceZ * Math.sqrt( p1Adj*(1-p1Adj)/n1Adj + p2Adj*(1-p2Adj)/n2Adj))/p1Adj*10000)/10000				
 		}
-	}	
+	}
 	
-	
+
 /*************************** Calculates Adjusted Wald Confidence Interval around the relative % difference in proportions (one-tailed) *************************************/	
 
 	//Usage: interval1_effect_binary(50, 100, 55, 120, 0.95).point;
-	// Likelihood of it being less than upper bound or greater than lower bound	
+	// Upper or lower bound for the effect
 	function interval1_effect_binary(aSuccess, aParticipants, bSuccess, bParticipants, confidencePct) {
 		var confidenceZ = normalAreaPctToZ(2*confidencePct-1); // z is same as 90% two-tailed confidence
 		var n1Adj = aParticipants + Math.pow(confidenceZ,2);
@@ -58,7 +58,8 @@
 /*************************** Calculates probability that a false positive will have effect greater than a given value in either direction *************************************/	
 	function p_effect_false_binary(conversionRate, sampleSize, effect) {
 		var confidenceZ = effect/(Math.sqrt( 2*conversionRate*(1-conversionRate)/sampleSize)/conversionRate);
-		return 2*(1-(normalAreaZToPct(confidenceZ)+1)/2);
+		//return 2*(1-(normalAreaZToPct(confidenceZ)+1)/2); Was experimenting with 1-tailed probability; ignore this
+		return 1-normalAreaZToPct(confidenceZ);
 	}
 	
 	
