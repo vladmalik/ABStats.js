@@ -1,5 +1,23 @@
 <?php
 
+
+
+
+
+
+
+
+/************************************ THIS PHP VERSION IS NO LONGER SUPPORTED **************************************/
+
+
+
+
+
+
+
+
+
+
 /***************************** Licensed under GPL v2 (c) 2015 Vlad Malik @vladmalik ********************************/
 
 // PHP requires a class to be defined
