@@ -1,0 +1,295 @@
+/******************** GENERAL STYLES *********************/
+
+body {
+	font-family: Open Sans;
+	padding:0;
+	font-size: 16pt;
+	color: #333;
+	padding: 40px 20px;
+}
+		
+		header {
+			border-bottom: 1px solid #ddd;
+			padding-bottom: 30px;
+		}
+
+		a, a:visited {
+			color: #088AFA;
+			text-decoration: none;
+		}
+
+		::-webkit-input-placeholder { color: #888; }
+		::-moz-placeholder { color: #888; } /* firefox 19+ */
+		:-ms-input-placeholder { color: #888; } /* ie */
+		input:-moz-placeholder { color: #888; }
+
+		table {
+			margin: 0 auto;
+		}
+		
+		table, tr, td, th {
+			border: 0;
+			text-align: center;
+			font-weight: 400;
+		}
+		th + th, td + td {
+			padding: 0 0 0 20px;
+		}
+		
+		form {
+			margin:0;
+			text-align: center;
+		}
+		
+				form label {
+					color: #666;
+					font-size: 12pt;
+				}
+				
+				label select {
+					border:0;
+					color: #666;
+					font-size: 12pt;					
+				}
+				
+				form th {
+					padding: 0 20px;	
+				}
+				
+				input + label {
+					margin-left: 10px;
+				}
+				
+				input {
+					padding: 10px 0 2px 0;
+					border: 0;
+					border-bottom: 1px solid #B6DAFC;
+					font-size: 40px;
+					color: #2185FF;
+				}
+				input:focus {
+					background: #FEFDBB;
+				}
+						
+				button {
+					-moz-box-shadow:inset 0px -3px 7px 0px #29bbff;
+					-webkit-box-shadow:inset 0px -3px 7px 0px #29bbff;
+					box-shadow:inset 0px -3px 7px 0px #29bbff;
+					background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #2dabf9), color-stop(1, #0688fa));
+					background:-moz-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+					background:-webkit-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+					background:-o-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+					background:-ms-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+					background:linear-gradient(to bottom, #2dabf9 5%, #0688fa 100%);
+					filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#2dabf9', endColorstr='#0688fa',GradientType=0);
+					background-color:#2dabf9;
+					-moz-border-radius:6px;
+					-webkit-border-radius:6px;
+					border-radius:6px;
+					border:1px solid #008DFF;
+					display:inline-block;
+					cursor:pointer;
+					color: white;
+					padding:20px 80px;
+					text-decoration:none;
+					text-shadow:0px 1px 0px #263666;
+					font-size: 22px;
+					font-weight: bold;
+					margin-top: 40px;
+				}
+				button:hover {
+					background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #0688fa), color-stop(1, #2dabf9));
+					background:-moz-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+					background:-webkit-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+					background:-o-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+					background:-ms-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+					background:linear-gradient(to bottom, #0688fa 5%, #2dabf9 100%);
+					filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0688fa', endColorstr='#2dabf9',GradientType=0);
+					background-color:#0688fa;
+				}
+				button:active {
+					position:relative;
+					top:1px;
+				}				
+		
+		h1 {
+			font-weight: 700;
+			color: #333;
+			font-size: 42pt;
+			text-align: center;
+			margin-top: 0;
+			margin-bottom: 40px;
+		}
+		
+				h1 small { 
+					display: block;
+					font-size: 18pt;
+					line-height: 30pt;
+				}
+		
+		h1 + nav {
+			margin-top: 30px;
+		}
+		
+		h2 {
+			font-weight: 400;
+			font-size: 30pt;
+		}
+		
+		em {
+			font-style: normal;
+			font-weight: 700;
+		}
+		
+		.toggle {
+			padding:0;
+			margin: 10px 0;
+			list-style: none;	
+		}
+		
+			.toggle li {
+				display: inline-block;
+				position: relative;
+			}
+
+					.toggle a {
+						text-decoration: none;
+						padding: 10px 20px;
+						border-radius: 10px;
+						display: inline-block;									
+						cursor: default;
+						border: 1px solid #DDEFFF;
+					}
+					.toggle .disabled a {
+						color: black;
+					}
+					.toggle .disabled:after {
+						content:"disabled";
+						color: red;
+						position: absolute;
+						top:4px; right:50%;
+						font-weight: 700;
+						font-size: 12px;
+					}
+					
+					.toggle li  a{
+						border-radius: 0;
+					}					
+					
+					.toggle li:first-of-type a {
+						border-radius: 10px 0 0 10px;
+					}								
+					.toggle li:last-of-type a {
+						border-radius: 0 10px 10px 0;
+					}
+
+					.toggle a:hover {
+						background: #E7F3FF;
+						cursor: pointer;
+					}					
+					.toggle .disabled a:hover {
+						background: white;
+						cursor: default;
+					}
+					.toggle a.selected, .toggle a.selected :hover {
+						background: #666;
+						border: 1px solid #666;
+						color: white;
+						cursor: default;
+						box-shadow: inset 5px 5px 5px 0 #555;
+						font-weight: 400;
+					}			
+		
+			.about-report {
+				font-size: 110%;
+				margin-bottom: 40px;
+				overflow:hidden;
+			}		
+		
+		
+/***************** SHAPES *****************/
+
+.downarrow {
+	margin: 20px 0 0 0;
+	font-size: 50px;
+	font-weight: 700;
+	line-height: 40px;
+	display: block;
+	color: #666;
+}
+
+/***************** HOME PAGE **************/
+
+.home nav {
+font-size: 18pt;
+font-weight: 300;		
+text-align: center;
+margin-bottom: 20px;
+}
+											
+/*#form_analyze_ab_binary {}*/
+		
+		#form_analyze_ab_binary .variation-name {
+			padding-left: 20px;
+			padding-right: 20px;
+		}
+		
+		#form_analyze_ab_binary .success, #form_analyze_ab_binary .visitors {
+			width: 160px;
+			text-align: center;
+		}	
+
+		#form_analyze_ab_binary .delete {
+			width: 30px;
+		}
+
+				#form_analyze_ab_binary .delete a {
+					color: red;
+					font-size: 25px;
+					cursor: pointer;
+					display: none;
+				}
+				#form_analyze_ab_binary tr:hover .delete a {
+					display: block;
+				}
+				
+		.placeholder {
+			opacity: 0.3;
+		}
+				
+/*#form_sample_ab_binary {}*/
+	
+		input.rate {
+			width: 115px;
+			text-align: center;
+		}				
+		
+		input.traffic {
+			width: 175px;
+			text-align: center;
+		}
+		
+		.input-weeks {
+			width: 115px;
+			text-align: center;
+		}
+		
+		.output-sample {			
+			font-size: 40px;
+		}
+		
+				.output-sample small {		
+					font-size: 50%;
+				}
+		
+/***************** REPORTS PAGE **************/
+
+.report section {
+	max-width: 1024px;
+	margin: 0 auto;
+}
+
+nav {
+	text-align: center;
+	margin-bottom: 20px;
+}

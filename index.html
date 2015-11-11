@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="description" content="">
+		<meta charset="utf-8">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<link rel="stylesheet" href="style.css">		
+		<script src="script.js"></script>		
+		<script src="abstats.js"></script>		
+	</head>
+	<body class="home">
+	
+		<header>
+			<h1>Plan and Analyze Your A/B Study</h1>
+			<nav>
+				<ul class="toggle" id="choice-task">
+					<li><a href="#" id="choice-sample" class="selected">Estimate Sample Size</a></li><li class="disabled"><a href="#" id="choice-analyze">Analyze Results</a></li>
+				</ul>
+				<ul class="toggle" id="choice-study">
+					<li class="disabled"><a href="#" id="choice-a">A study</a></li><li class="disabled"><a href="#" id="choice-aa">A / A study</a></li><li><a href="#"  id="choice-ab" class="selected">A / B study</a></li>
+				</ul>
+				<ul class="toggle" id="choice-data">
+					<li class="disabled"><a href="#" id="choice-continuous">Continuous (revenue, time)</a></li><li><a href="#" id="choice-binary" class="selected">Conversion Rate (%)</a></li>						
+				</ul>
+				<span class="downarrow"></span>
+			</nav>
+		</header>
+		
+		<form class="form-userstats" id="form_sample_ab_binary">
+			<p class="about-report">Sample and effect size projections given a time-coinstraint.</p>
+			<table>
+				<thead>
+					<tr>
+						<th><label>Current Conversion Rate</label></th>
+						<th><label>Unique Visitors to the Test Page</label></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><input class="rate" type="text" value="5" maxlength="4"><label>%</label></td>
+						<td><input class="traffic" type="text" value="5000" maxlength="6"><label class="for-traffic"><select><option value="week">per week</option><option value="month">per month</option><option value="day">per day</option></select></label></td>
+					</tr>							
+				</tbody>	
+			</table>
+			<button type="submit">Plan Your Study</button>		
+		</form>
+		
+		<form class="form-userstats" id="form_analyze_ab_binary" style="display: none">
+			<table>
+				<thead>
+					<tr>
+						<th>Variation Name</th>
+						<th class="success">Successes</th>
+						<th class="visitors">Visitors</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="baseline">
+						<td><input type="text" value="Baseline" class="variation-name" maxlength="22"></td>
+						<td><input class="success" type="text" value="50" maxlength="6"></td>
+						<td><input class="visitors" type="text" value="100" maxlength="6"></td>
+					</tr>				
+					<tr>
+						<td><input type="text" placeholder="Variation 1" class="variation-name"></td>
+						<td><input class="success" type="text" value="65" maxlength="6"></td>
+						<td><input class="visitors" type="text" value="110" maxlength="6"></td>
+						<td class="delete"><a>&#10006;</a></td>
+					</tr>				
+					<tr class="placeholder">
+						<td><input type="text" placeholder="Variation 2" class="variation-name"></td>
+						<td><input class="success" type="text" maxlength="6"></td>
+						<td><input class="visitors" type="text" maxlength="6"></td>
+					</tr>
+				</tbody>	
+			</table>
+			<button>View Your Report</button>
+		</form>
+		<form class="form-userstats" id="form_sample_a_binary" style="display: none">Coming soon</form>
+		<form class="form-userstats" id="form_sample_aa_binary" style="display: none">Coming soon</form>
+		<form class="form-userstats" id="form_analyze_a_binary" style="display: none">Coming soon</form>
+		<form class="form-userstats" id="form_analyze_aa_binary" style="display: none">Coming soon</form>
+		<form class="form-userstats" id="form_sample_a_continuous" style="display: none">Coming soon</form>
+		<form class="form-userstats" id="form_sample_aa_continuous" style="display: none">Coming soon</form>
+		<form class="form-userstats" id="form_analyze_a_continuous" style="display: none">Coming soon</form>		
+		<form class="form-userstats" id="form_analyze_aa_continuous" style="display: none">Coming soon</form>		
+		<form class="form-userstats" id="form_sample_ab_continuous" style="display: none">Coming soon</form>
+		<form class="form-userstats" id="form_analyze_ab_continuous" style="display: none">Coming soon</form>
+		
+		<script type="text/javascript">
+		  WebFontConfig = {
+			google: { families: [ 'Open+Sans:400,300,700:latin', 'Roboto:400,300,700:latin' ] }
+		  };
+		  (function() {
+			var wf = document.createElement('script');
+			wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+			  '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+			wf.type = 'text/javascript';
+			wf.async = 'true';
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(wf, s);
+		  })(); </script>	
+		  
+	</body>
+</html>

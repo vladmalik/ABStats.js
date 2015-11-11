@@ -3,23 +3,10 @@ ABStats.js / ABStats.php
 
 A statistical library for A/B testing (Version 1.02 Updated April 24, 2015). 
 
-Plan your test and analyse your A/B data with a single line of code, embed analytics into existing programs, [enhance user scripts](http://goodui.org/vwoaddon), or just study the code to learn about statistics.
-
 How to use it
 ----------------------
 
 You can embed abstats.js in your project or run commands right in the browser console. No programming knowledge required. To use it in the browser, just visit [this blog about abstats.js](http://vladmalik.com/2015/02/23/5-ways-to-get-confidence-with-abstats-js), which has the library already loaded. All you need to do is open console and run any of these commands.
-
-5 easy ways to calculate confidence in test results
-----------------------
-[Check out this easy intro with examples](http://vladmalik.com/2015/02/23/5-ways-to-get-confidence-with-abstats-js/)
-
-Current uses
-----------------------
-
-[Analytics Addon for VWO Dashboard](http://goodui.org/vwoaddon/)
-
-Our internal email notification system (code coming soon)
 
 Functions included
 ----------------------
@@ -28,9 +15,17 @@ Functions included
 
 Calculate Adjusted Wald Confidence Interval with 
 
-**interval_rel_binary()**
+**interval_effect_binary()**
 
 Calculates Adjusted Wald Confidence Interval around the relative % difference in proportions
+
+**interval1_effect_binary()**
+
+Calculates 1-tailed Adjusted Wald Confidence Interval around the relative % difference in proportions
+
+**p_effect_false_binary()**
+
+Calculates probability of getting an effect size by chance.
 
 **confidence_binary()**
 
