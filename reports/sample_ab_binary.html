@@ -1,299 +1,1 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta name="description" content="">
-		<meta charset="utf-8">
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-		<script src="../abstats.js"></script>
-		<link rel="stylesheet" href="../style.css">		
-	</head>
-	<body class="report">
-		<!--section>
-			<h1>Aim For 11,231 Total Visitors <small>5,057 visitors per version with 2 versions</small> <small>3 weeks with 4,000 visitors per week</small></h1>
-		</section>	
-		<section>
-			<h2>Traffic</h2>
-			<p></p>
-			<div style="background: #eee; margin: 20px 0; color: white; font-size: smaller"><div style="background: #666; width: 20%; height: 30px; display: inline-block; border-right: 1px solid #eee; text-align: center">Baseline</div><div style="background: #666; width: 20%; height: 30px; display: inline-block; text-align: center">Version B</div></div>
-		</section>
-		<section>
-			<h2>5,057 visitors x 2 versions (A vs. B)</h2>
-			<p>If your study does affect user behavior, you’d expect to confirm it with a sample this large. This sample achieves a reasonable balance between duration and your odds of detecting a real effect.</p>			
-		</section>
-		<section>
-			<h2>3 weeks assuming 4,000 visitors per week</small></h2>
-		</section-->		
-		<h1>Chance To Detect Effect</h1>
-		<section class="report-sensitivity">
-			<h3>What if an effect exist but its size is unknown?</h3>
-			<p>Assuming a variation truly is better, here are effect sizes detectible within the <em>time constraint</em> specified. Don't plan on detecting an improvement (or drop) smaller than this.</p>
-			<table class="form-duration">
-				<thead>
-					<tr>
-						<th><label>Weeks duration</label></th>
-						<th><label>Visitors <strong>per variation</strong></label></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td><input type="text" maxlength="4" value="2" class="input-weeks context-sensitivity"></td>
-						<td><output class="output-sample"></output></td>
-					</tr>							
-				</tbody>
-			</table>			
-			<div class="chart"></div>
-			<div class="warnings">
-				<p class='warning warning-lowpower'><span class="symbol-warning">&#9888;</span> The test doesn't have enough sensitivity (power) to detect reasonably smaller effects. To detect a smaller effect, (a) increase test duration, (b) test something else, (c) change your metric, or (d) run a sequential test (comparing to past data).</p>
-				<p class='warning warning-toolong'><span class="symbol-warning">&#9888;</span> Your test may be too long. Consider the opportunity cost and risks of running multi-month tests. Try choosing a primary metric with a higher rate in order to reduce duration.</p>
-			</div>	
-			<p class="assumptions">				
-				<span><em>Assuming effect exists</em></span>
-				<span class="rate"><em><output class="rate-output"></output>%</em> conversion rate</span>
-				<span class="traffic"><em><output class="traffic-output"></output></em> visitors/week</span>
-			</p>
-		</section>
-		<section class="falsepositive">
-			<h3>What if an effect does not exist?</h3>
-			<p>If there is no difference, here is a range of effects you can expect just by chance.</p>
-			<table class="form-duration">
-				<thead>
-					<tr>
-						<th><label>Weeks duration</label></th>
-						<th><label>Visitors <strong>per variation</strong></label></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td><input type="text" maxlength="4" value="2" class="input-weeks context-falsepositive"></td>
-						<td><output class="output-sample"></output></td>
-					</tr>							
-				</tbody>
-			</table>
-			<div class="chart"></div>
-		</section>			
-
-		<script type="text/javascript">
-		  WebFontConfig = {
-			google: { families: [ 'Open+Sans:400,300,700:latin', 'Roboto:400,300,700:latin' ] }
-		  };
-		  (function() {
-			var wf = document.createElement('script');
-			wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-			  '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-			wf.type = 'text/javascript';
-			wf.async = 'true';
-			var s = document.getElementsByTagName('script')[0];
-			s.parentNode.insertBefore(wf, s);
-		  })(); </script>
-		  
-		<script>	
-		
-			function updateParams(weeks, rate, traffic) {
-				window.location.hash = window.location.hash.replace(/(weeks=).*?(&|$)/, "$1" + weeks + "$2");
-			}
-			function defaultParams() {
-				if(window.location.hash == "") window.location.hash = "#rate=50&traffic=1000&weeks=2";
-				else if(window.location.hash.indexOf("weeks") == -1) window.location.hash += "&weeks=2";
-			}
-		
-			// Get data from URL
-			defaultParams();
-			var params = window.location.hash.split("#")[1];
-			var userStats = params.split("&");
-			var rate = userStats[0] ? (userStats[0].split("=")[1])/100 : 0.05;
-			var traffic = userStats[1] ? userStats[1].split("=")[1] : 1000;
-			var weeks = userStats[2] ? userStats[2].split("=")[1] : 2;
-			$(".input-weeks").val(weeks);
-			var sample = weeks*traffic;
-			if(rate) $(".rate-output").html(Math.round(rate*10000)/100);
-			if(traffic) $(".traffic-output").html(traffic);
-			
-			var contextSensitivity = $(".report-sensitivity");
-			var chartSensitivity = $(".chart", contextSensitivity);
-			var outputSample = $(".output-sample");
-			var sensitivityBuckets = [0.90,0.8,0.7,0.6,.50];
-			var effect = [];
-			var initialized = false;
-			
-			$(".input-weeks").on({
-				"keyup" : function() {
-					weeks = $(this).val();
-					updateParams(weeks);
-					sample = weeks == "" || weeks == "0" ? 2*traffic : weeks*traffic;
-					if($(this).hasClass("context-sensitivity")) drawSensitivity();
-				},
-				"change" : function() {
-					var weeksInput = $(this);
-					updateParams(weeks);
-					outputSample.html(sample.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-					$(".input-weeks").not(this).val(weeks);
-					if(!$(this).hasClass("context-sensitivity")) drawSensitivity();
-				}
-			});
-			
-			$(document).on({
-				"warningLowpower" : function() {
-					$(".warning-lowpower").fadeIn();
-				},
-				"warningToolong" : function() {
-					$(".warning-toolong").fadeIn();
-				}
-			});			
-			
-			function drawSensitivity() {
-				$(".warning", contextSensitivity).hide();
-				$(".chart-bar", contextSensitivity).css("width", "0");
-				outputSample.html(sample.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-				for(i=0;i<sensitivityBuckets.length;i++) {
-					(function(a) {
-						effect[a] = Math.round(100*effect_binary(rate, sample, 0.95, sensitivityBuckets[a]));
-						if(!initialized) {
-							chartSensitivity.append("<div class='row'><span class='effect'>" + effect[a] + "<small>%</small></span><span class='chart-container'><span class='chart-label'>" + sensitivityBuckets[a]*100 + "% chance" + (sensitivityBuckets[a]*100 == 80 ? " <small>(recommended minimum)</small>" : "") + "</span><span class='chart-bar chart-bar-" + (a+1) + "' style='width:0'></span></span></div>");
-							setTimeout(function() {
-								$(".chart-bar-" + (a+1)).stop().animate({
-									width : sensitivityBuckets[a]*100 + "%"
-								}, 400);
-							}, a*75);
-						} else {
-							setTimeout(function() {
-								var chart = chartSensitivity.children().eq(a);
-								chart.find(".effect").html(effect[a] + "<small>%</small>");
-							}, a*200);
-							setTimeout(function() {								
-								$(".chart-bar-" + (a+1)).stop().animate({
-									width : sensitivityBuckets[a]*100 + "%"
-								}, 400);
-							}, a*75);							
-						}
-						if(a == sensitivityBuckets.length-1 && effect[a] > 20) $(document).trigger("warningLowpower");						
-					})(i);					
-				}
-				initialized = true;
-				if(weeks > 8) $(document).trigger("warningToolong");
-			}
-			drawSensitivity();
-			
-		</script>	
-
-		<style>
-			
-			.warnings {
-				margin-top: 0;
-			}
-			
-					.warnings:after {
-						clear: both;
-						content: "";
-						display:block;
-					}
-					.warning {
-						color: white;
-						font-size: 80%;
-						background: #DA0A0A;
-						padding: 10px 20px 10px 65px;
-						width: 90%;
-						box-sizing: border-box;
-						float: right;
-						margin: 0;
-						position: relative;
-					}
-					.symbol-warning {
-						color: white;
-						position: absolute;
-						top:10px; left:10px;
-						height: 100%;
-						width: 65px;
-						font-size: 50px;
-						line-height: 35px;
-						margin-right: 20px;
-						margin-bottom: 30px;
-					}			
-		
-			.report-sensitivity {
-				width: 800px;
-				margin: 0 auto;
-			}
-			
-					.report-sensitivity .chart {
-						margin-top: 20px;
-					}
-					
-						.report-sensitivity .row {
-							height: 50px;
-							width: 100%;
-							position: relative;
-						}
-						.report-sensitivity .row + .row {
-							margin-top: 5px;
-						}		
-						
-							.report-sensitivity .effect {
-								float: left;
-								width: 10%;
-								min-width: 60px;
-								line-height: 50px;
-								text-align: center;
-							}										
-							
-							.report-sensitivity .chart-container {
-								background: #ddd;
-								float: left;
-								height: 50px;
-								width: 90%;
-								margin-bottom: 5px;
-								position: relative;
-							}
-							
-								.report-sensitivity .chart-label {
-									position: absolute;
-									top:0; left: 20px;
-									line-height: 50px;
-									color: white;
-									font-size: 80%;
-								}
-								.report-sensitivity .chart-container:before {		
-									content: "";
-									position: absolute;
-									top:17px; left:0;
-									border: 8px solid white;
-									border-right: 0;
-									border-top-color: transparent;
-									border-bottom-color: transparent;
-								}
-							
-								.report-sensitivity .chart-bar {
-									display:block;
-									height: 50px;
-									background: #999;
-								}
-								
-								.report-sensitivity .chart-bar-1 {
-									background: #00AA15;
-								}						
-								.report-sensitivity .chart-bar-2 {
-									background: #00AA15;
-								}						
-								.report-sensitivity .chart-bar-3 {
-									background: #66BC70;
-								}	
-
-								.effect {
-									font-weight: 700;
-								}
-								
-					.assumptions {
-						font-size: 80%;
-						text-align: right;
-					}
-							
-							.assumptions span {
-								display: inline-block;							
-							}						
-							.assumptions span + span {
-								margin-left: 20px;
-							}
-		</style>
-	  
-	</body>
-
-</html>
+<!DOCTYPE html><html>	<head>		<meta name="description" content="">		<meta charset="utf-8">		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>		<script src="../abstats.js"></script>		<link rel="stylesheet" href="../style.css">			</head>	<body class="report">		<!--section>			<h1>Aim For 11,231 Total Visitors <small>5,057 visitors per version with 2 versions</small> <small>3 weeks with 4,000 visitors per week</small></h1>		</section>			<section>			<h2>Traffic</h2>			<p></p>			<div style="background: #eee; margin: 20px 0; color: white; font-size: smaller"><div style="background: #666; width: 20%; height: 30px; display: inline-block; border-right: 1px solid #eee; text-align: center">Baseline</div><div style="background: #666; width: 20%; height: 30px; display: inline-block; text-align: center">Version B</div></div>		</section>		<section>			<h2>5,057 visitors x 2 versions (A vs. B)</h2>			<p>If your study does affect user behavior, you’d expect to confirm it with a sample this large. This sample achieves a reasonable balance between duration and your odds of detecting a real effect.</p>					</section>		<section>			<h2>3 weeks assuming 4,000 visitors per week</small></h2>		</section-->				<h1>What Effect You Can Expect</h1>		<section class="report-sensitivity">			<h2>What if an effect exists but size is unknown?</h2>						<form class="group-inputs">				<p>Assuming your improvements make a difference, here are statistically significant effect sizes detectible within your <em>time constraint</em>. You're not likely to detect a change smaller than this even if it's there.</p>				<table class="form-duration">					<thead>						<tr>							<th><label>Weeks duration</label></th>							<th><label>Visitors <em>per variation</em></label></th>						</tr>					</thead>					<tbody>						<tr>							<td><input type="text" maxlength="4" value="2" class="input-weeks context-sensitivity"></td>							<td><output class="output-sample"></output></td>						</tr>												</tbody>				</table>			</form>			<div class="chart-type-bar">				<div class="chart"></div>				<div class="chart-warnings">					<p class='warning warning-lowpower' style='display: none'><span class="symbol-warning">&#9888;</span> The test doesn't have enough sensitivity (power) to detect reasonably smaller effects. To detect a smaller effect, (a) increase test duration, (b) test something else, (c) change your metric, or (d) implement change, wait, and compare to past metrics.</p>					<p class='warning warning-toolong' style='display: none'><span class="symbol-warning">&#9888;</span> Your test may be too long. Consider the opportunity cost and risks of running multi-month tests. Try choosing a primary metric with a higher rate in order to reduce duration.</p>				</div>					<p class="chart-assumptions">									<span><em>Assumption:</em> True effect is at least this large</span>					<span class="rate"><em><output class="rate-output"></output>%</em> conversion rate</span>					<span class="traffic"><em><output class="traffic-output"></output></em> visitors/week</span>				</p>						</div>			<p>The effect can be positive or negative. If you detect a statistically strong effect smaller than expected or observe an effect far sooner than expected, be extra skeptical.</p>			<!--h3>Interpreting after the test</h3>			<p>Compare the test result to what was predicted. Detecting a statistically significant effect lower than what you expected might mean it's a false positive.</p-->		</section>		<section class="report-falsepositive">			<h2>How likely is a false positive?</h2>			<p>It's possible your improved version made no difference. Here is a range of effects you can expect just by chance.</p>			<form class="group-inputs">							<table class="form-duration">					<thead>						<tr>							<th><label>Weeks duration</label></th>							<th><label>Visitors <em>per variation</em></label></th>						</tr>					</thead>					<tbody>						<tr>							<td><input type="text" maxlength="4" value="2" class="input-weeks context-falsepositive"></td>							<td><output class="output-sample"></output></td>						</tr>												</tbody>				</table>			</form>				<div class="chart chart-type-bar">				<div class="chart"></div>				<div class="chart-warnings">					<p class='warning warning-falsepositive' style='display: none'><span class="symbol-warning">&#9888;</span> Your risk of seeing large effects just by chance is a tad high. If you are doing exploratory testing, increase duration to reduce the risk of getting large false positives.</p>				</div>				<p class="chart-assumptions">									<span><em>Assumption:</em> There is no real drop or improvement</span>					<span class="rate"><em><output class="rate-output"></output>%</em> conversion rate</span>					<span class="traffic"><em><output class="traffic-output"></output></em> visitors/week</span>				</p>								</div>			<h3>Balance sensitivity and false positive risk</h3>						<p>Since you don't know if there is an effect or not, make sure you have high sensitivity to detect a true effect if it's there but a low risk of detecting a similar effect just by chance.</p>			<h3>False positive rate is 1 in 20</h3>			<p>This report sets alpha at 0.05. This means that if you call any result that reaches a p-value of 0.05, then your false positive rate will be 1 in 20 or less. This will be true no matter how long you run your test, though the effect size detected will decrease if you run tests longer. If you regularly peek and decide to keep going as your tests run, then your false positive rate will increase.</p>		</section>			<script type="text/javascript">		  WebFontConfig = {			google: { families: [ 'Open+Sans:400,300,700:latin', 'Roboto:400,300,700:latin' ] }		  };		  (function() {			var wf = document.createElement('script');			wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +			  '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';			wf.type = 'text/javascript';			wf.async = 'true';			var s = document.getElementsByTagName('script')[0];			s.parentNode.insertBefore(wf, s);		  })(); </script>		  		<script src="reports.js"></script>	</body></html></html>

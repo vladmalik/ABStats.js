@@ -55,7 +55,8 @@
 	
 	
 	
-/*************************** Calculates probability that a false positive will have effect greater than a given value in either direction *************************************/	
+/*************************** Calculates probability that a false positive will have effect greater than a given value in either direction *************************************/
+	// Confirmed by simulation and matches expected p-value
 	function p_effect_false_binary(conversionRate, sampleSize, effect) {
 		var confidenceZ = effect/(Math.sqrt( 2*conversionRate*(1-conversionRate)/sampleSize)/conversionRate);
 		//return 2*(1-(normalAreaZToPct(confidenceZ)+1)/2); Was experimenting with 1-tailed probability; ignore this
