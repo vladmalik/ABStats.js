@@ -6,7 +6,7 @@ A statistical library for A/B testing (Version 1.02 Updated April 24, 2015).
 How to use it
 ----------------------
 
-You can embed abstats.js in your project or run commands right in the browser console. No programming knowledge required. To use it in the browser, just visit [this blog about abstats.js](http://vladmalik.com/2015/02/23/5-ways-to-get-confidence-with-abstats-js), which has the library already loaded. All you need to do is open console and run any of these commands.
+You can embed abstats.js in your project or run commands right in the browser console. No programming knowledge required. To use it in the browser, just visit [this calculator page](http://vladmalik.com/abstats), which has the library already loaded. All you need to do is open the browser console and run any of these commands.
 
 Functions included
 ----------------------
