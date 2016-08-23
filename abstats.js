@@ -41,26 +41,43 @@
 	//Usage: interval1_effect_binary(50, 100, 55, 120, 0.95).point;
 	// Upper or lower bound for the effect
 	function interval1_effect_binary(aSuccess, aParticipants, bSuccess, bParticipants, confidencePct) {
-		var confidenceZ = normalAreaPctToZ(2*confidencePct-1); // z is same as 90% two-tailed confidence
-		var n1Adj = aParticipants + Math.pow(confidenceZ,2);
-		var p1Adj = (aSuccess + Math.pow(confidenceZ, 2)/2)/n1Adj;
-		var n2Adj = bParticipants + Math.pow(confidenceZ,2);
-		var p2Adj = (bSuccess + Math.pow(confidenceZ, 2)/2)/n2Adj;
+		var z = normalAreaPctToZ(2*confidencePct-1); // z is same as 90% two-tailed confidence
+		var n1Adj = aParticipants + Math.pow(z,2);
+		var p1Adj = (aSuccess + Math.pow(z, 2)/2)/n1Adj;
+		var n2Adj = bParticipants + Math.pow(z,2);
+		var p2Adj = (bSuccess + Math.pow(z, 2)/2)/n2Adj;
 		return {
-			upper : Math.ceil(((p2Adj-p1Adj) + confidenceZ * Math.sqrt( p1Adj*(1-p1Adj)/n1Adj + p2Adj*(1-p2Adj)/n2Adj))/p1Adj*10000)/10000,
+			upper : Math.ceil(((p2Adj-p1Adj) + z * Math.sqrt( p1Adj*(1-p1Adj)/n1Adj + p2Adj*(1-p2Adj)/n2Adj))/p1Adj*10000)/10000,
 			point : Math.ceil(((p2Adj-p1Adj)/p1Adj*10000))/10000,
-			lower : Math.ceil(((p2Adj-p1Adj) - confidenceZ * Math.sqrt( p1Adj*(1-p1Adj)/n1Adj + p2Adj*(1-p2Adj)/n2Adj))/p1Adj*10000)/10000				
+			lower : Math.ceil(((p2Adj-p1Adj) - z * Math.sqrt( p1Adj*(1-p1Adj)/n1Adj + p2Adj*(1-p2Adj)/n2Adj))/p1Adj*10000)/10000				
 		}
 	}
+	
+	
+	
+/*************************** Calculates predicted interval for relative increase *************************************/	
+
+	//Usage: interval_effect_expected_binary(0.05, 0.2, 10000, 0.95).point;
+	function interval_effect_expected_binary(p, relativePctChange, sample, confidencePct) {
+		var z = normalAreaPctToZ(confidencePct);
+		var p2 = p*(1+relativePctChange);
+		var pDiff = p2-p;
+		return {
+			upper : Math.ceil((pDiff + z * Math.sqrt( p*(1-p)/sample + p2*(1-p2)/sample))/p*10000)/10000,
+			point : Math.ceil((pDiff/p*10000))/10000,
+			lower : Math.ceil((pDiff - z * Math.sqrt( p*(1-p)/sample + p2*(1-p2)/sample))/p*10000)/10000				
+		}
+	}
+		
 	
 	
 	
 /*************************** Calculates probability that a false positive will have effect greater than a given value in either direction *************************************/
 	// Confirmed by simulation and matches expected p-value
 	function p_effect_false_binary(conversionRate, sampleSize, effect) {
-		var confidenceZ = effect/(Math.sqrt( 2*conversionRate*(1-conversionRate)/sampleSize)/conversionRate);
-		//return 2*(1-(normalAreaZToPct(confidenceZ)+1)/2); Was experimenting with 1-tailed probability; ignore this
-		return 1-normalAreaZToPct(confidenceZ);
+		var z = effect/(Math.sqrt( 2*conversionRate*(1-conversionRate)/sampleSize)/conversionRate);
+		//return 2*(1-(normalAreaZToPct(z)+1)/2); Was experimenting with 1-tailed probability; ignore this
+		return 1-normalAreaZToPct(z);
 	}
 	
 	
