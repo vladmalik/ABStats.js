@@ -23,6 +23,10 @@ Calculates Adjusted Wald Confidence Interval around the relative % difference in
 
 Calculates 1-tailed Adjusted Wald Confidence Interval around the relative % difference in proportions
 
+**interval_effect_expected_binary()**
+
+Calculates predicted interval for relative increase
+
 **p_effect_false_binary()**
 
 Calculates probability of getting an effect size by chance.
